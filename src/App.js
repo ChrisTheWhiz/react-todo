@@ -1,21 +1,64 @@
 import React, {useState} from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import './Styles.scss';
 
 function App() {
 
     const [todos, setTodos] = useState([
         {
-            content: 'Pickup dry cleaning',
-            isCompleted: true,
+            projectName: 'Programming',
+            todos: [
+                {
+                    content: 'Learn Hooks',
+                    isCompleted: true,
+                },
+                {
+                    content: 'Style the app',
+                    isCompleted: true,
+                },
+                {
+                    content: 'Migrate to TypeScript',
+                    isCompleted: false,
+                },
+                {
+                    content: 'Create tests',
+                    isCompleted: true
+                }
+            ]
         },
         {
-            content: 'Get haircut',
-            isCompleted: false,
+            projectName: 'Chores',
+            todos: [
+                {
+                    content: 'Clean Keyboard',
+                    isCompleted: true,
+                },
+                {
+                    content: 'Walk Dog',
+                    isCompleted: false,
+                },
+                {
+                    content: 'Do dishes',
+                    isCompleted: false,
+                },
+            ]
         },
         {
-            content: 'Build a todo app in React',
-            isCompleted: false,
+            projectName: 'Groceries',
+            todos: [
+                {
+                    content: '1kg Carrots',
+                    isCompleted: false,
+                },
+                {
+                    content: '2 Cauliflowers',
+                    isCompleted: false,
+                },
+                {
+                    content: '1kg Button Mushrooms',
+                    isCompleted: false,
+                },
+            ]
         }
     ]);
 
@@ -64,27 +107,36 @@ function App() {
     return (
         <div className="app">
             <div className="header">
-                <img src={logo} className="logo" alt="logo"/>
+                <h2>React Todo App</h2>
+                <button>Clear Local Storage</button>
             </div>
             <form className="todo-list">
-                <ul>
-                    {todos.map((todo, i) => (
-                        <div className={`todo ${todo.isCompleted && 'todo-is-completed'}`} key={i}>
-                            {/* eslint-disable-next-line*/}
-                            <div className={'checkbox'} onClick={() => toggleTodoCompleteAtIndex(i)}>
-                                {todo.isCompleted && (
-                                    <span>&#x2714;</span>
-                                )}
-                            </div>
-                            <input
-                                type="text"
-                                value={todo.content}
-                                onKeyDown={e => handleKeyDown(e, i)}
-                                onChange={e => updateTodoAtIndex(e, i)}
-                            />
-                        </div>
-                    ))}
-                </ul>
+                {todos.map((project) => (
+                    <div className="todo-category" key={project.projectName}>
+                        <input className="category-header"
+                               type="text"
+                               value={project.projectName}
+                        />
+                        <ul>
+                            {project.todos.map((todo, i) => (
+                                <div className={`todo ${todo.isCompleted && 'todo-is-completed'}`} key={i}>
+                                    {/* eslint-disable-next-line*/}
+                                    <div className="checkbox" onClick={() => toggleTodoCompleteAtIndex(i)}>
+                                        {todo.isCompleted && (
+                                            <span>&#x2714;</span>
+                                        )}
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={todo.content}
+                                        onKeyDown={e => handleKeyDown(e, i)}
+                                        onChange={e => updateTodoAtIndex(e, i)}
+                                    />
+                                </div>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
             </form>
         </div>
     );
