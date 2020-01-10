@@ -62,46 +62,55 @@ function App() {
         }
     ]);
 
-    function handleKeyDown(e, i) {
+    function handleInputChange(e, projectIndex, todoIndex) {
+        const newState = [...todos];
+        if (typeof todoIndex !== 'undefined') {
+            // change in a todo
+            newState[projectIndex].todos[todoIndex].content = e.target.value;
+        } else {
+            // change in a project name
+            newState[projectIndex].projectName = e.target.value;
+        }
+        setTodos(newState);
+    }
+
+    function handleInputKeyDown(e, projectIndex, todoIndex) {
         if (e.key === 'Enter') {
-            createTodoAtIndex(e, i);
+            const tempState = [...todos];
+            if (typeof todoIndex !== 'undefined') {
+                // change in a todo
+                tempState[projectIndex].todos.splice(todoIndex + 1, 0, {content: '', isCompleted: false});
+                setTimeout(() => {
+                    // document.forms[0].elements[i + 1].focus();
+                    document.forms[0].elements[projectIndex+todoIndex+3].focus();
+                }, 0);
+            } else {
+                // change in a project name
+                tempState[projectIndex].todos.splice(0, 0, {content: '', isCompleted: false});
+                setTimeout(() => {
+                    document.forms[0].elements[projectIndex+1].focus();
+                }, 0);
+            }
+            setTodos(tempState);
         }
-        if (e.key === 'Backspace' && todos[i].content === '') {
-            e.preventDefault();
-            return removeTodoAtIndex(i);
-        }
     }
 
-    function removeTodoAtIndex(i) {
-        if (i === 0 && todos.length === 1) return;
-        setTodos(todos => todos.slice(0, i).concat(todos.slice(i + 1, todos.length)));
-        setTimeout(() => {
-            if (i) document.forms[0].elements[i - 1].focus();
-        }, 0);
+    function handleRemoveCommand(projectIndex, todoIndex) {
+        const tempState = [...todos];
+        tempState[projectIndex].todos.splice(todoIndex, 1);
+        setTodos(tempState);
     }
 
-    function createTodoAtIndex(e, i) {
-        const newTodos = [...todos];
-        newTodos.splice(i + 1, 0, {
-            content: '',
-            isCompleted: false,
-        });
-        setTodos(newTodos);
-        setTimeout(() => {
-            document.forms[0].elements[i + 1].focus();
-        }, 0);
-    }
-
-    function updateTodoAtIndex(e, i) {
-        const newTodos = [...todos];
-        newTodos[i].content = e.target.value;
-        setTodos(newTodos);
-    }
-
-    function toggleTodoCompleteAtIndex(index) {
+    function toggleTodoCompleteAtIndex(projectIndex, todoIndex) {
         const temporaryTodos = [...todos];
-        temporaryTodos[index].isCompleted = !temporaryTodos[index].isCompleted;
+        temporaryTodos[projectIndex].todos[todoIndex].isCompleted = !temporaryTodos[projectIndex].todos[todoIndex].isCompleted;
         setTodos(temporaryTodos);
+    }
+
+    function setCloseButton(mode, projectIndex, todoIndex) {
+        const tempState = [...todos];
+        tempState[projectIndex].todos[todoIndex].showCloseButton = mode;
+        setTodos(tempState);
     }
 
     return (
@@ -111,17 +120,23 @@ function App() {
                 <button>Clear Local Storage</button>
             </div>
             <form className="todo-list">
-                {todos.map((project) => (
-                    <div className="todo-category" key={project.projectName}>
+                {todos.map((project, projectIndex) => (
+                    <div className="todo-category" key={projectIndex}>
                         <input className="category-header"
                                type="text"
                                value={project.projectName}
+                               onChange={e => handleInputChange(e, projectIndex)}
+                               onKeyDown={e => handleInputKeyDown(e, projectIndex)}
                         />
                         <ul>
-                            {project.todos.map((todo, i) => (
-                                <div className={`todo ${todo.isCompleted && 'todo-is-completed'}`} key={i}>
+                            {project.todos.map((todo, todoIndex) => (
+                                <div className={`todo ${todo.isCompleted && 'todo-is-completed'}`} key={todoIndex}
+                                     onMouseEnter={() => setCloseButton(true, projectIndex, todoIndex)}
+                                     onMouseLeave={() => setCloseButton(false, projectIndex, todoIndex)}
+                                >
                                     {/* eslint-disable-next-line*/}
-                                    <div className="checkbox" onClick={() => toggleTodoCompleteAtIndex(i)}>
+                                    <div className="checkbox"
+                                         onClick={() => toggleTodoCompleteAtIndex(projectIndex, todoIndex)}>
                                         {todo.isCompleted && (
                                             <span>&#x2714;</span>
                                         )}
@@ -129,9 +144,12 @@ function App() {
                                     <input
                                         type="text"
                                         value={todo.content}
-                                        onKeyDown={e => handleKeyDown(e, i)}
-                                        onChange={e => updateTodoAtIndex(e, i)}
+                                        onChange={e => handleInputChange(e, projectIndex, todoIndex)}
+                                        onKeyDown={e => handleInputKeyDown(e, projectIndex, todoIndex)}
                                     />
+                                    {todo.showCloseButton? <button type="button" className='close'
+                                                                   onClick={() => handleRemoveCommand(projectIndex, todoIndex)}
+                                    >x</button>: null}
                                 </div>
                             ))}
                         </ul>
