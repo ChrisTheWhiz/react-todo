@@ -1,12 +1,20 @@
 import React, {useState} from 'react';
+import {TodosService} from "./todosData";
 import './App.scss';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
-import placeholderTodos from "./todosData";
 import TodoCategory from "./TodoCategory";
+
+const todoRepo = new TodosService();
 
 function App() {
 
-    const [todos, setTodos] = useState(placeholderTodos);
+    const [todos, setState] = useState(() => todoRepo.getTodos());
+
+    /// helper function
+    function setTodos(newState) {
+        todoRepo.updateTodos(newState);
+        setState(newState);
+    }
 
     function handleInputChange(e, projectIndex, todoIndex) {
         const newState = [...todos];
@@ -119,7 +127,7 @@ function App() {
                 <div className="buttons">
                     <button onClick={() => removeCompletedTodos()}>Remove Completed</button>
                     <button onClick={() => createNewProject()}>Add new project</button>
-                    <button>Clear Local Storage</button>
+                    <button onClick={() => todoRepo.clearLocalStorage()}>Clear Local Storage</button>
                 </div>
             </div>
             <DragDropContext onDragEnd={onDragEnd} onDragStart={() => setTrashVisibility(true)}>

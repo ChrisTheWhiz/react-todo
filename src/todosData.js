@@ -57,4 +57,31 @@ const placeholderTodos = [
 ];
 
 
-export default placeholderTodos;
+export class TodosService {
+    todos;
+
+    constructor() {
+        if (localStorage.getItem('todosData') === null) {
+            this.todos = placeholderTodos;
+        } else {
+            this.todos = JSON.parse(localStorage.getItem('todosData'));
+        }
+    }
+
+    getTodos() {
+        return this.todos;
+    }
+
+    updateTodos(newTodos) {
+        this.todos = newTodos;
+        this.updateLocalStorage();
+    }
+
+    updateLocalStorage() {
+        localStorage.setItem('todosData', JSON.stringify(this.todos));
+    }
+
+    clearLocalStorage() {
+        localStorage.clear();
+    }
+}
