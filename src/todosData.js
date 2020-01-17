@@ -1,4 +1,4 @@
-export const placeholderTodos = [
+const placeholderTodos = [
     {
         projectName: 'Programming',
         todos: [
@@ -55,3 +55,6 @@ export const placeholderTodos = [
         ]
     }
 ];
+
+
+export default placeholderTodos;

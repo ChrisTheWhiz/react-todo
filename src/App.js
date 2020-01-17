@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
 import './App.scss';
-import './Styles.scss';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
-import {placeholderTodos} from "./todos.service";
+import placeholderTodos from "./todosData";
 import TodoCategory from "./TodoCategory";
-
 
 function App() {
 
@@ -29,14 +27,14 @@ function App() {
                 // change in a todo
                 tempState[projectIndex].todos.splice(todoIndex + 1, 0, {content: '', isCompleted: false});
                 setTimeout(() => {
-                    // document.forms[0].elements[i + 1].focus();
-                    document.forms[0].elements[projectIndex + todoIndex + 3].focus();
+                    document.getElementById(`${projectIndex}-${todoIndex+1}`).focus()
                 }, 0);
             } else {
                 // change in a project name
                 tempState[projectIndex].todos.splice(0, 0, {content: '', isCompleted: false});
                 setTimeout(() => {
-                    document.forms[0].elements[projectIndex + 1].focus();
+                    // document.forms[0].elements[projectIndex + 1].focus();
+                    document.getElementById(`${projectIndex}-0`).focus()
                 }, 0);
             }
             setTodos(tempState);

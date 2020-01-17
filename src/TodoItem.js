@@ -16,6 +16,7 @@ export default function TodoItem(props) {
             )}
         </div>
         <input
+            id={`${projectIndex}-${todoIndex}`}
             type="text"
             value={todo.content}
             onChange={e => handleInputChange(e, projectIndex, todoIndex)}
