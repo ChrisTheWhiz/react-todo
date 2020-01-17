@@ -27,7 +27,7 @@ function App() {
                 // change in a todo
                 tempState[projectIndex].todos.splice(todoIndex + 1, 0, {content: '', isCompleted: false});
                 setTimeout(() => {
-                    document.getElementById(`${projectIndex}-${todoIndex+1}`).focus()
+                    document.getElementById(`${projectIndex}-${todoIndex + 1}`).focus()
                 }, 0);
             } else {
                 // change in a project name
@@ -85,11 +85,42 @@ function App() {
         mode ? el.style.opacity = '1' : el.style.opacity = '0';
     }
 
+    function createNewProject() {
+        const newState = [...todos];
+        newState.splice(0, 0, {
+                projectName: '',
+                todos: [
+                    {
+                        content: '',
+                        isCompleted: false,
+                    }
+                ]
+            }
+        );
+        setTodos(newState);
+    }
+
+    function removeCompletedTodos() {
+        const newState = [...todos];
+
+        todos.forEach((project) => {
+            project.todos = project.todos.filter((todo) => {
+                return !todo.isCompleted;
+            })
+        });
+
+        setTodos(newState);
+    }
+
     return (
         <div className="app">
             <div className="header">
                 <h2>React Todo App</h2>
-                <button>Clear Local Storage</button>
+                <div className="buttons">
+                    <button onClick={() => removeCompletedTodos()}>Remove Completed</button>
+                    <button onClick={() => createNewProject()}>Add new project</button>
+                    <button>Clear Local Storage</button>
+                </div>
             </div>
             <DragDropContext onDragEnd={onDragEnd} onDragStart={() => setTrashVisibility(true)}>
                 <Droppable droppableId="trash">
@@ -98,7 +129,7 @@ function App() {
                              ref={provided.innerRef}
                              {...provided.droppableProps}
                              id="trash"
-                        >TRASHCAN
+                        >DELETE
                             <div style={{display: 'none'}}>{provided.placeholder}</div>
                         </div>
                     )}

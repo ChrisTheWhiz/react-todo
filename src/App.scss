@@ -25,25 +25,29 @@ input {
 
 .header {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   color: white;
 
-  button {
-    margin-left: 2rem;
-    background-color: #2e2e2e;
-    color: #dddddd;
-    border: 2px solid #cccccc;
-    border-radius: 5px;
-    transition: all .2s ease-out;
-    padding: .2rem .6rem;
-    cursor: pointer;
+  .buttons {
+    margin-bottom: 2rem;
 
-    &:hover {
-      background-color: #3a3a3a;
-      color: #ffffff;
-      border-color: #ffffff;
+    button {
+      margin-left: 2rem;
+      background-color: #2e2e2e;
+      color: #dddddd;
+      border: 2px solid #cccccc;
+      border-radius: 5px;
+      transition: all .2s ease-out;
+      padding: .2rem .6rem;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #3a3a3a;
+        color: #ffffff;
+        border-color: #ffffff;
+      }
     }
   }
 
