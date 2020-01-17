@@ -7,12 +7,8 @@ const placeholderTodos = [
                 isCompleted: true,
             },
             {
-                content: 'Style the app',
+                content: 'Learn local storage',
                 isCompleted: true,
-            },
-            {
-                content: 'Migrate to TypeScript',
-                isCompleted: false,
             },
             {
                 content: 'Create tests',

@@ -3,6 +3,7 @@ import {TodosService} from "./todosData";
 import './App.scss';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import TodoCategory from "./TodoCategory";
+import {useAlert} from 'react-alert'
 
 const todoRepo = new TodosService();
 
@@ -62,9 +63,6 @@ function App() {
     }
 
     function setCloseButton(mode, projectIndex, todoIndex) {
-        // const tempState = [...todos];
-        // tempState[projectIndex].todos[todoIndex].showCloseButton = mode;
-        // setTodos(tempState);
         const closeButton = document.getElementById(`${projectIndex}-${todoIndex}`).nextSibling;
         closeButton.style.display = mode ? 'block' : 'none';
     }
@@ -107,6 +105,7 @@ function App() {
                 ]
             }
         );
+        document.forms[0].elements[0].focus();
         setTodos(newState);
     }
 
@@ -127,6 +126,26 @@ function App() {
         window.location.reload();
     }
 
+
+    const alert = useAlert();
+    if (localStorage.getItem('alertShown') === null) {
+        localStorage.setItem('alertShown', 'true');
+        alert.show('Welcome to the the React Todo App! This is a quick tutorial on using it.', {
+            onClose: () => {
+                setTimeout(() => alert.show('You can press enter inside an input field to create a todo below it; you can delete todos by pressing the "X" button on their right. Delete completed todos by pressing "Remove Completed"', {
+                    onClose: () => {
+                        setTimeout(() => alert.show('You can drag project by their handle to reorder or delete them, and can create a new project by pressing "Add new project".', {
+                            onClose: () => {
+                                setTimeout(() => alert.show('Local storage is used to preserve app state between sessions. Press"Clear Local Storage" to delete all data from your device. This will make the tutorial show again.', {
+                                    type: 'last'
+                                }), 0)
+                            }
+                        }), 0)
+                    }
+                }), 0)
+            }
+        });
+    }
     return (
         <div className="app">
             <div className="header">
