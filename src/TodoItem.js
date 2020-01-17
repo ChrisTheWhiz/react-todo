@@ -22,8 +22,8 @@ export default function TodoItem(props) {
             onChange={e => handleInputChange(e, projectIndex, todoIndex)}
             onKeyDown={e => handleInputKeyDown(e, projectIndex, todoIndex)}
         />
-        {todo.showCloseButton ? <button type="button" className='close'
+        <button type="button" className='close'
                                         onClick={() => handleRemoveCommand(projectIndex, todoIndex)}
-        >X</button> : null}
+        >X</button>
     </div>
 }

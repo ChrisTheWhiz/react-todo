@@ -62,9 +62,11 @@ function App() {
     }
 
     function setCloseButton(mode, projectIndex, todoIndex) {
-        const tempState = [...todos];
-        tempState[projectIndex].todos[todoIndex].showCloseButton = mode;
-        setTodos(tempState);
+        // const tempState = [...todos];
+        // tempState[projectIndex].todos[todoIndex].showCloseButton = mode;
+        // setTodos(tempState);
+        const closeButton = document.getElementById(`${projectIndex}-${todoIndex}`).nextSibling;
+        closeButton.style.display = mode ? 'block' : 'none';
     }
 
     function onDragEnd(result) {
@@ -120,6 +122,11 @@ function App() {
         setTodos(newState);
     }
 
+    function appReset() {
+        todoRepo.clearLocalStorage();
+        window.location.reload();
+    }
+
     return (
         <div className="app">
             <div className="header">
@@ -127,7 +134,7 @@ function App() {
                 <div className="buttons">
                     <button onClick={() => removeCompletedTodos()}>Remove Completed</button>
                     <button onClick={() => createNewProject()}>Add new project</button>
-                    <button onClick={() => todoRepo.clearLocalStorage()}>Clear Local Storage</button>
+                    <button onClick={() => appReset()}>Clear Local Storage</button>
                 </div>
             </div>
             <DragDropContext onDragEnd={onDragEnd} onDragStart={() => setTrashVisibility(true)}>

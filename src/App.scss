@@ -145,6 +145,7 @@ input {
         color: #dddddd;
         cursor: pointer;
         transition: all 0.2s ease-out;
+        display: none;
 
         &:hover {
           background-color: #1a1a1a;
