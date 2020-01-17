@@ -19,6 +19,7 @@ body {
     border-radius: 5px;
     transition: all .2s ease-out;
     padding: .2rem .6rem;
+    cursor: pointer;
 
     &:hover {
       background-color: #3a3a3a;
@@ -116,7 +117,7 @@ body {
         border-radius: 50%;
         border-style: solid;
         font-size: .8rem;
-        line-height: 20px;
+        line-height: 23px;
         background-color: #2a2a2a;
         color: #dddddd;
         cursor: pointer;

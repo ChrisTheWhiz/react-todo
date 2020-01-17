@@ -2,67 +2,13 @@ import React, {useState} from 'react';
 import './App.scss';
 import './Styles.scss';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
+import {placeholderTodos} from "./todos.service";
+import TodoCategory from "./TodoCategory";
 
 
 function App() {
 
-    const [todos, setTodos] = useState([
-        {
-            projectName: 'Programming',
-            todos: [
-                {
-                    content: 'Learn Hooks',
-                    isCompleted: true,
-                },
-                {
-                    content: 'Style the app',
-                    isCompleted: true,
-                },
-                {
-                    content: 'Migrate to TypeScript',
-                    isCompleted: false,
-                },
-                {
-                    content: 'Create tests',
-                    isCompleted: true
-                }
-            ]
-        },
-        {
-            projectName: 'Chores',
-            todos: [
-                {
-                    content: 'Clean Keyboard',
-                    isCompleted: true,
-                },
-                {
-                    content: 'Walk Dog',
-                    isCompleted: false,
-                },
-                {
-                    content: 'Do dishes',
-                    isCompleted: false,
-                },
-            ]
-        },
-            // {
-            //     projectName: 'Groceries',
-            //     todos: [
-            //         {
-            //             content: '1kg Carrots',
-            //             isCompleted: false,
-            //         },
-            //         {
-            //             content: '2 Cauliflowers',
-            //             isCompleted: false,
-            //         },
-            //         {
-            //             content: '1kg Button Mushrooms',
-            //             isCompleted: false,
-            //         },
-            //     ]
-            // }
-    ]);
+    const [todos, setTodos] = useState(placeholderTodos);
 
     function handleInputChange(e, projectIndex, todoIndex) {
         const newState = [...todos];
@@ -164,59 +110,29 @@ function App() {
                         <form className="todo-list"
                               ref={provided.innerRef}
                               {...provided.droppableProps}>
-                            {provided.placeholder}
-                            {todos.map((project, projectIndex) => (
-                                <Draggable
-                                    key={projectIndex}
-                                    draggableId={projectIndex.toString()}
-                                    index={projectIndex}
-                                >
-                                    {(provided) => (
-                                        <div className="todo-category"
-                                             key={projectIndex}
-                                             {...provided.draggableProps}
-                                             ref={provided.innerRef}
+                            <ul>
+                                {todos.map((project, projectIndex) => (
+                                    <li key={projectIndex}>
+                                        <Draggable
+                                            draggableId={projectIndex.toString()}
+                                            index={projectIndex}
                                         >
-                                            <span className="drag-handle"
-                                                  {...provided.dragHandleProps}
-                                            >≡</span>
-                                            <input
-                                                className="category-header"
-                                                type="text"
-                                                value={project.projectName}
-                                                onChange={e => handleInputChange(e, projectIndex)}
-                                                onKeyDown={e => handleInputKeyDown(e, projectIndex)}
-                                            />
-                                            <ul>
-                                                {project.todos.map((todo, todoIndex) => (
-                                                    <div className={`todo ${todo.isCompleted && 'todo-is-completed'}`}
-                                                         key={todoIndex}
-                                                         onMouseEnter={() => setCloseButton(true, projectIndex, todoIndex)}
-                                                         onMouseLeave={() => setCloseButton(false, projectIndex, todoIndex)}
-                                                    >
-                                                        {/* eslint-disable-next-line*/}
-                                                        <div className="checkbox"
-                                                             onClick={() => toggleTodoCompleteAtIndex(projectIndex, todoIndex)}>
-                                                            {todo.isCompleted && (
-                                                                <span>&#x2714;</span>
-                                                            )}
-                                                        </div>
-                                                        <input
-                                                            type="text"
-                                                            value={todo.content}
-                                                            onChange={e => handleInputChange(e, projectIndex, todoIndex)}
-                                                            onKeyDown={e => handleInputKeyDown(e, projectIndex, todoIndex)}
-                                                        />
-                                                        {todo.showCloseButton ? <button type="button" className='close'
-                                                                                        onClick={() => handleRemoveCommand(projectIndex, todoIndex)}
-                                                        >x</button> : null}
-                                                    </div>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
+                                            {(provided) => (
+                                                <TodoCategory {...{
+                                                    projectIndex,
+                                                    provided,
+                                                    project,
+                                                    handleInputChange,
+                                                    handleInputKeyDown,
+                                                    setCloseButton,
+                                                    toggleTodoCompleteAtIndex,
+                                                    handleRemoveCommand
+                                                }}/>
+                                            )}
+                                        </Draggable>
+                                    </li>
+                                ))}
+                            </ul>
                         </form>)}
                 </Droppable>
             </DragDropContext>
